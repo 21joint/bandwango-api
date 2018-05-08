@@ -12,19 +12,6 @@ api.use(bodyParser.urlencoded({extended: false}));
 api.disable('x-powered-by');
 
 const url = process.argv[2].replace(/--/, '');
-
-api.post('/getpdf', Render);
-// Error page.
-api.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).send('Oops, An expected error seems to have occurred.')
-});
-
-// Terminate process
-process.on('SIGINT', () => {
-    process.exit(0)
-});
-
 const Render = async (req, res, next) => {
     const filename = `receipt_t${new Date().getTime()}.pdf`;
     const path = `public/${filename}`;
@@ -63,7 +50,21 @@ const Render = async (req, res, next) => {
         'Content-Disposition': contentDisposition(path)
     });
     fs.createReadStream(path).pipe(res).on('finish', () => fs.unlink(path, (e) => console.log(e)));
+    next();
 
 };
+
+api.post('/getpdf', Render);
+// Error page.
+api.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).send('Oops, An expected error seems to have occurred.')
+});
+
+
+// Terminate process
+process.on('SIGINT', () => {
+    process.exit(0);
+});
 
 module.exports = api;
