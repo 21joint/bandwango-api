@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prerestart": "npm i -g pm2",
+    "preinstall": "npm i -g pm2",
     "start": "pm2 start ./bin/www"
   },
   "dependencies": {
