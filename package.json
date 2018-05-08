@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npm i -g pm2",
-    "start": "pm2 start bin/www -i 0 --attach -p"
+    "start": "pm2 start bin/www -i 0"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
