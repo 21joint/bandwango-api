@@ -15,7 +15,7 @@ api.disable('x-powered-by');
 const Render = async (req, res, next) => {
     try {
         const filename = `receipt_t${new Date().getTime()}.pdf`;
-        const path = `public/${filename}`;
+        const path = `./${filename}`;
         const email = req.body.email;
         const query = req.body.query;
         const browser = await puppeteer.launch({

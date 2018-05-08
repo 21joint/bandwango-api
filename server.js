@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const app = require('../api');
+const app = require('./api');
 const debug = require('debug')('bandwango-node:server');
 const http = require('http');
 
@@ -91,6 +91,3 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
-
-
-module.exports.port = port;
