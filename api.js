@@ -11,7 +11,7 @@ api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({extended: false}));
 api.disable('x-powered-by');
 
-const url = process.argv[2].replace(/--/, '');
+// const url = process.argv[2].replace(/--/, '');
 const Render = async (req, res, next) => {
     const filename = `receipt_t${new Date().getTime()}.pdf`;
     const path = `public/${filename}`;
