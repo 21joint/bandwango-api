@@ -17,7 +17,7 @@ const Render = async (req, res, next) => {
     const path = `public/${filename}`;
     const email = req.body.email;
     const query = req.body.query;
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({args: ['--no-sandbox','--disable-setuid-sandbox']});
     const page = await browser.newPage();
     await page.goto(query, {
         timeout: 60000,
