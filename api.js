@@ -16,11 +16,6 @@ api.disable('x-powered-by');
 
 
 api.post('/getpdf', cors(), Render);
-// Error page.
-api.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).send('Oops, An expected error seems to have occurred.')
-});
 
 async function Render(req, res, next) {
     try {
@@ -59,11 +54,16 @@ async function Render(req, res, next) {
             'Content-Disposition': contentDisposition(path)
         });
         fs.createReadStream(path).pipe(res).on('finish', () => fs.unlink(path, (e) => console.log(e)));
-    } catch (e) {
-        throw e;
+    } catch (error) {
+        next(error);
     }
 }
 
+// Error page.
+api.use(function (err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!')
+})
 
 // Terminate process
 process.on('SIGINT', () => {
