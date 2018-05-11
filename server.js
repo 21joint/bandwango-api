@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const app = require('./api');
+const api = require('./api');
 const debug = require('debug')('bandwango-node:server');
 const http = require('http');
 
@@ -13,13 +13,13 @@ const http = require('http');
  */
 
 const port = normalizePort(process.env.PORT || 3002);
-app.set('port', port);
+api.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const server = http.createServer(api);
 
 /**
  * Listen on provided port, on all network interfaces.
