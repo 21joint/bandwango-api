@@ -17,6 +17,12 @@ api.disable('x-powered-by');
 
 api.post('/getpdf', cors(), Render);
 
+// Error page.
+api.use(function (err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!')
+})
+
 async function Render(req, res, next) {
     try {
         const filename = `receipt_t${new Date().getTime()}.pdf`;
@@ -58,12 +64,6 @@ async function Render(req, res, next) {
         next(error);
     }
 }
-
-// Error page.
-api.use(function (err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!')
-})
 
 // Terminate process
 // process.on('SIGINT', () => {
