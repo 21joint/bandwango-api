@@ -29,6 +29,7 @@ async function Render(req, res, next) {
         const query = req.body.query;
         const browser = await puppeteer.launch({
             ignoreHTTPSErrors: true,
+            headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         const page = await browser.newPage();
