@@ -3,6 +3,7 @@ const puppeteer = require('puppeteer');
 const express = require('express');
 const bodyParser = require('body-parser');
 const contentDisposition = require('content-disposition');
+const cors = require('cors');
 
 
 const api = express();
@@ -14,7 +15,7 @@ api.disable('x-powered-by');
 // const url = process.argv[2].replace(/--/, '');
 
 
-api.post('/getpdf', Render);
+api.post('/getpdf', cors(), Render);
 // Error page.
 api.use((err, req, res, next) => {
     console.error(err);
@@ -25,8 +26,8 @@ async function Render(req, res, next) {
     try {
         const filename = `receipt_t${new Date().getTime()}.pdf`;
         const path = `./${filename}`;
-        const email = req.body.email;
-        const query = req.body.query;
+        const email = req.body.email.toString();
+        const query = req.body.query.toString();
         const browser = await puppeteer.launch({
             ignoreHTTPSErrors: true,
             headless: true,
