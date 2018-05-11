@@ -26,8 +26,8 @@ async function Render(req, res, next) {
     try {
         const filename = `receipt_t${new Date().getTime()}.pdf`;
         const path = `./${filename}`;
-        const email = req.body.email.toString();
-        const query = req.body.query.toString();
+        const email = req.body['email'];
+        const query = req.body['query'];
         const browser = await puppeteer.launch({
             ignoreHTTPSErrors: true,
             headless: true,
