@@ -66,8 +66,8 @@ api.use(function (err, req, res, next) {
 })
 
 // Terminate process
-process.on('SIGINT', () => {
-    process.exit(0);
-});
+// process.on('SIGINT', () => {
+//     process.exit(0);
+// });
 
 module.exports = api;
