@@ -5,9 +5,14 @@ const bodyParser = require('body-parser');
 const contentDisposition = require('content-disposition');
 const cors = require('cors');
 const api = express();
-
+const IS_DEV = api.get('env') == 'development';
+console.log(IS_DEV);
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({extended: false}));
+
+const str = 'http://app.bandwango.com/dashboard/receipt?p=3&t=TY9QG2ZZE&orderId=368128';
+console.log();
+
 
 // const url = process.argv[2].replace(/--/, '');
 //
@@ -35,7 +40,7 @@ async function Render(req, res, next) {
         const filename = `receipt_t${new Date().getTime()}.pdf`;
         const path = `./${filename}`;
         const email = req.body['email'];
-        const query = req.body['query'];
+        const query = IS_DEV ? 'http://localhost:3002' + req.body['query'].slice(req.body['query'].indexOf('.com/') + 4) : req.body['query'];
         const browser = await puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
