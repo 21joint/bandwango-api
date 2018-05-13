@@ -14,14 +14,18 @@ api.disable('x-powered-by');
 
 // const url = process.argv[2].replace(/--/, '');
 
+const _cors = (function(req) {
+     return (req.protocol.indexOf('https') > -1 ? cors : undefined);
+})();
 
-api.post('/getpdf', cors(), Render);
+
+api.post('/getpdf', _cors(), Render);
 
 // Error page.
 api.use(function (err, req, res, next) {
     console.error(err.stack);
     res.status(500).send('Something broke!')
-})
+});
 
 async function Render(req, res, next) {
     try {
