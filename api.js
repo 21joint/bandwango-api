@@ -3,6 +3,7 @@ const puppeteer = require('puppeteer');
 const express = require('express');
 const bodyParser = require('body-parser');
 const contentDisposition = require('content-disposition');
+const cors = require('cors');
 
 
 const api = express();
@@ -11,11 +12,7 @@ api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({extended: false}));
 api.disable('x-powered-by');
 
-api.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+api.use(cors());
 
 // const url = process.argv[2].replace(/--/, '');
 //
