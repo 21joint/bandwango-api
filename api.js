@@ -77,7 +77,7 @@ async function Render(req, res, next) {
         });
         fs.createReadStream(path).pipe(res).on('finish', () => fs.unlink(path, (e) => console.log(e)));
     } catch (error) {
-        next(error);
+        console.error(error);
     }
 }
 
