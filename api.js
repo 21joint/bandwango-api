@@ -14,12 +14,18 @@ api.disable('x-powered-by');
 
 // const url = process.argv[2].replace(/--/, '');
 
-const _cors = (function(req) {
-     return (req.protocol.indexOf('https') > -1 ? cors : undefined);
-})();
+const whitelist = ['https://app.bandwango.com', 'https://bandwango-laravel-sandbox.herokuapp.com'];
+const resolveCorsOptions = (req, cb) => {
+    let corsOptions;
+    if (whitelist.indexOf(req.header('Origin')) !== -1) {
+        corsOptions = {origin: true} // reflect (enable) the requested origin in the CORS response
+    } else {
+        corsOptions = {origin: false} // disable CORS for this request
+    }
+    cb(null, corsOptions) // callback expects two parameters: error and options
+};
 
-
-api.post('/getpdf', _cors(), Render);
+api.post('/getpdf', cors(resolveCorsOptions), Render);
 
 // Error page.
 api.use(function (err, req, res, next) {
