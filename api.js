@@ -14,7 +14,7 @@ api.disable('x-powered-by');
 
 // const url = process.argv[2].replace(/--/, '');
 
-const whitelist = ['https://app.bandwango.com', 'https://bandwango-laravel-sandbox.herokuapp.com'];
+const whitelist = ['http://localhost:8000', 'http://localhost:3000'];
 const resolveCorsOptions = (req, cb) => {
     let corsOptions;
     if (whitelist.indexOf(req.header('Origin')) !== -1) {
