@@ -4,21 +4,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const contentDisposition = require('content-disposition');
 const cors = require('cors');
-
-
 const api = express();
-api.use(express.static('public'));
+
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({extended: false}));
-api.disable('x-powered-by');
-api.use(cors());
-
-
-// Generic error handler used by all endpoints.
-function handleError(res, reason, message, code) {
-    console.log("ERROR: " + reason);
-    res.status(code || 500).json({"error": message});
-}
 
 // const url = process.argv[2].replace(/--/, '');
 //
@@ -33,7 +22,7 @@ function handleError(res, reason, message, code) {
 //     cb(null, corsOptions) // callback expects two parameters: error and options
 // };
 
-api.post('/getpdf', Render);
+api.post('/getpdf', cors(), Render);
 
 // Error page.
 api.use(function (err, req, res, next) {
@@ -68,7 +57,7 @@ async function Render(req, res, next) {
         await page.pdf({
             path: path,
             format: 'A4',
-            printBackground: true
+            scale: 0.72
         });
         res.set({
             'Content-Type': 'application/pdf',
