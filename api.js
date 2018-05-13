@@ -41,6 +41,7 @@ async function Render(req, res, next) {
         const path = `./${filename}`;
         const email = req.body['email'];
         const query = IS_DEV ? 'http://localhost:3002' + req.body['query'].slice(req.body['query'].indexOf('.com/') + 4) : req.body['query'];
+        console.log(query);
         const browser = await puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
