@@ -11,8 +11,14 @@ api.use(express.static('public'));
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({extended: false}));
 api.disable('x-powered-by');
-
 api.use(cors());
+
+
+// Generic error handler used by all endpoints.
+function handleError(res, reason, message, code) {
+    console.log("ERROR: " + reason);
+    res.status(code || 500).json({"error": message});
+}
 
 // const url = process.argv[2].replace(/--/, '');
 //
@@ -42,8 +48,6 @@ async function Render(req, res, next) {
         const email = req.body['email'];
         const query = req.body['query'];
         const browser = await puppeteer.launch({
-            ignoreHTTPSErrors: true,
-            headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         const page = await browser.newPage();
@@ -78,8 +82,8 @@ async function Render(req, res, next) {
 }
 
 // Terminate process
-// process.on('SIGINT', () => {
-//     process.exit(0);
-// });
+process.on('SIGINT', () => {
+    process.exit(0);
+});
 
 module.exports = api;
