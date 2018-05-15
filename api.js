@@ -4,15 +4,21 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const contentDisposition = require('content-disposition');
 const cors = require('cors');
+
+
 const api = express();
-const IS_DEV = api.get('env') == 'development';
-console.log(IS_DEV);
+api.use(express.static('public'));
 api.use(bodyParser.json());
 api.use(bodyParser.urlencoded({extended: false}));
+api.disable('x-powered-by');
+api.use(cors());
 
-const str = 'http://app.bandwango.com/dashboard/receipt?p=3&t=TY9QG2ZZE&orderId=368128';
-console.log();
 
+// Generic error handler used by all endpoints.
+function handleError(res, reason, message, code) {
+    console.log("ERROR: " + reason);
+    res.status(code || 500).json({"error": message});
+}
 
 // const url = process.argv[2].replace(/--/, '');
 //
@@ -27,7 +33,7 @@ console.log();
 //     cb(null, corsOptions) // callback expects two parameters: error and options
 // };
 
-api.post('/getpdf', cors(), Render);
+api.post('/getpdf', Render);
 
 // Error page.
 api.use(function (err, req, res, next) {
@@ -40,30 +46,32 @@ async function Render(req, res, next) {
         const filename = `receipt_t${new Date().getTime()}.pdf`;
         const path = `./${filename}`;
         const email = req.body['email'];
-        const query = IS_DEV ? 'http://localhost:3002' + req.body['query'].slice(req.body['query'].indexOf('.com/') + 4) : req.body['query'];
-        console.log(query);
+        const query = req.body['query'];
         const browser = await puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         const page = await browser.newPage();
+
+
+        await page.setDefaultNavigationTimeout(0);
+        await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 2});
         await page.goto(query, {
             timeout: 60000,
             waitUntil: 'domcontentloaded'
         });
         await page.type('[name=email]', email);
         await page.click('[type=submit]');
-        await page.waitForNavigation({
-            timeout: 60000,
-            waitUntil: 'domcontentloaded'
-        });
-        await page.goto(query, {
+        await page.waitForNavigation();
+        await page.close();
+        const pdfPage = await browser.newPage();
+        await pdfPage.goto(query, {
             timeout: 60000,
             waitUntil: 'networkidle0'
         });
-        await page.pdf({
+        await pdfPage.pdf({
             path: path,
             format: 'A4',
-            scale: 0.72
+            printBackground: true
         });
         res.set({
             'Content-Type': 'application/pdf',
@@ -72,7 +80,7 @@ async function Render(req, res, next) {
         });
         fs.createReadStream(path).pipe(res).on('finish', () => fs.unlink(path, (e) => console.log(e)));
     } catch (error) {
-        console.error(error);
+        next(error);
     }
 }
 
