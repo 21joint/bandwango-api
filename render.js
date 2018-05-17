@@ -4,9 +4,8 @@ const puppeteer = require('puppeteer');
 const filename = `receipt_t${new Date().getTime()}.pdf`;
 const path = `./${filename}`;
 
+
 let render = async (html, callback) => {
-
-
     const browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
@@ -14,7 +13,7 @@ let render = async (html, callback) => {
 
     await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 2});
     await page.setJavaScriptEnabled(false);
-    await page.setContent(html);
+    await page.setContent(html, {waitUntil: 'networkidle0'});
     await page.pdf({
         path: path,
         format: 'A4',
@@ -22,8 +21,8 @@ let render = async (html, callback) => {
     }).then(callback, (error) => console.error(error));
     await browser.close();
 
-    return fs.createReadStream(path);
-};
 
+    return await fs.createReadStream(path);
+};
 
 module.exports = render;

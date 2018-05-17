@@ -1,74 +1,40 @@
-const fs = require('fs');
-const puppeteer = require('puppeteer');
 const express = require('express');
 const bodyParser = require('body-parser');
 const contentDisposition = require('content-disposition');
 const cors = require('cors');
 const render = require('./render');
+const purifycss = require('purify-css');
 
 
 const api = express();
-api.use(express.static('public'));
-api.use(bodyParser.json());
-api.use(bodyParser.urlencoded({extended: false}));
+api.use(bodyParser.json({limit: '10mb'}));
+api.use(bodyParser.urlencoded({extended: false, limit: '10mb'}));
 api.disable('x-powered-by');
 api.use(cors());
 
-// const url = process.argv[2].replace(/--/, '');
-//
-// const whitelist = ['http://localhost:8000', 'http://localhost:3000'];
-// const resolveCorsOptions = (req, cb) => {
-//     let corsOptions;
-//     if (whitelist.indexOf(req.header('Origin')) !== -1) {
-//         corsOptions = {origin: true} // reflect (enable) the requested origin in the CORS response
-//     } else {
-//         corsOptions = {origin: false} // disable CORS for this request
-//     }
-//     cb(null, corsOptions) // callback expects two parameters: error and options
-// };
-// let Render = async function(req, res, next) {
-//     const filename = `receipt_t${new Date().getTime()}.pdf`;
-//     const path = `./${filename}`;
-//     const email = req.body['email'];
-//     const query = req.body['query'];
-//     try {
-//         const browser = await puppeteer.launch({
-//             args: ['--no-sandbox', '--disable-setuid-sandbox']
-//         });
-//         const page = await browser.newPage();
-//
-//
-//         await page.setDefaultNavigationTimeout(0);
-//         await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 2});
-//         await page.goto(query, {
-//             waitUntil: 'domcontentloaded'
-//         });
-//         await page.type('[name=email]', email);
-//         await page.click('[type=submit]');
-//         await page.waitForNavigation();
-//         await page.close();
-//         const pdfPage = await browser.newPage();
-//         await pdfPage.goto(query, {
-//             waitUntil: 'networkidle0'
-//         });
-//         await pdfPage.pdf({
-//             path: path,
-//             format: 'A4',
-//             printBackground: true
-//         });
-//         res.set({
-//             'Content-Type': 'application/pdf',
-//             'Content-Size': path.length,
-//             'Content-Disposition': contentDisposition(path)
-//         });
-//         fs.createReadStream(path).pipe(res).on('finish', () => fs.unlink(path, (e) => console.log(e)));
-//     } catch (error) {
-//         next(error);
-//     }
-// };
+const buildHtml = async (content, styles) => {
+    return await `<!doctype html><html>
+<head>
+    <title>${new Date().getTime()}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>${styles}</style>
+</head>
+<body>
+    ${content}
+</body>
+</html>`
+};
+
 
 api.post('/getpdf', async (req, res, next) => {
-    const stream = await render(req.body.content);
+    const stylesheet = await purifycss(req.body.content, req.body.styles);
+    console.log('purified styles: ', stylesheet);
+    const html = await buildHtml(req.body.content, stylesheet);
+    console.log('html: ', html);
+    const stream = await render(html);
+
     res.set({
         'Content-Type': 'application/pdf',
     });
