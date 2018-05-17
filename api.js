@@ -12,10 +12,11 @@ api.use(bodyParser.urlencoded({extended: false, limit: '10mb'}));
 api.disable('x-powered-by');
 api.use(cors());
 
-const buildHtml = async (content, styles) => {
+const buildHtml = async (host, content, styles) => {
     return await `<!doctype html><html>
 <head>
-    <title>${new Date().getTime()}</title>
+    <base href="${host}">
+    <title>Receipt ${new Date().getTime()}</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,10 +30,15 @@ const buildHtml = async (content, styles) => {
 
 
 api.post('/getpdf', async (req, res, next) => {
-    const stylesheet = await purifycss(req.body.content, req.body.styles);
+    const stylesheet = await purifycss(req.body.content, req.body.styles, {
+        // Will minify CSS code in addition to purify.
+        minify: true,
+        // Logs out removed selectors.
+        rejected: true,
+        info: true
+    });
     console.log('purified styles: ', stylesheet);
-    const html = await buildHtml(req.body.content, stylesheet);
-    console.log('html: ', html);
+    const html = await buildHtml(req.body.host, req.body.content, stylesheet);
     const stream = await render(html);
 
     res.set({
