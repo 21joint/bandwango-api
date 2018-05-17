@@ -42,11 +42,11 @@ api.use(function (err, req, res, next) {
 });
 
 async function Render(req, res, next) {
+    const filename = `receipt_t${new Date().getTime()}.pdf`;
+    const path = `./${filename}`;
+    const email = req.body['email'];
+    const query = req.body['query'];
     try {
-        const filename = `receipt_t${new Date().getTime()}.pdf`;
-        const path = `./${filename}`;
-        const email = req.body['email'];
-        const query = req.body['query'];
         const browser = await puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
