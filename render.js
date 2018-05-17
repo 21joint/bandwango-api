@@ -2,7 +2,7 @@ const fs = require('fs');
 const puppeteer = require('puppeteer');
 
 const filename = `receipt_t${new Date().getTime()}.pdf`;
-const path = `./.tmp/${filename}`;
+const path = `./${filename}`;
 
 
 let render = async (html, callback) => {
@@ -20,7 +20,7 @@ let render = async (html, callback) => {
         scale: 0.72
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return await fs.createReadStream(path);
+    return fs.createReadStream(path);
 };
 
 module.exports = render;
