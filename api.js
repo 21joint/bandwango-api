@@ -11,8 +11,7 @@ api.disable('x-powered-by');
 api.use(cors());
 
 api.post('/getpdf', async (req, res, next) => {
-    try {
-        const html = await `<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    const html = await `<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
                 <head>
                     <base href="${req.headers.origin}">
                     <title>Receipt ${new Date().getTime()}</title>
@@ -20,25 +19,21 @@ api.post('/getpdf', async (req, res, next) => {
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                     <style media="all">${purifycss(req.body.content, req.body.styles, {// Will minify CSS code in addition to purify.
-            minify: true,
-            // Logs out removed selectors.
-            rejected: true,
-            info: true,
-            whitelist: ['*prh*', 'body']
-        })}</style>
+        minify: true,
+        // Logs out removed selectors.
+        rejected: true,
+        info: true,
+        whitelist: ['*prh*', 'body']
+    })}</style>
                 </head>
                 <body>${req.body.content}</body>
             </html>`;
-        const stream = await render(html, req.headers);
-        res.set({
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': contentDisposition(stream.path)
-        });
-        stream.pipe(res);
-
-    } catch (error) {
-        console.error(error)
-    }
+    const stream = await render(html, req.headers);
+    res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': contentDisposition(stream.path)
+    });
+    stream.pipe(res);
 });
 
 // Error page.

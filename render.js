@@ -26,7 +26,7 @@ let render = async (html, req, callback) => {
         scale: 0.75
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return await fs.createReadStream(path);
+    return fs.createReadStream(path);
 };
 
 module.exports = render;
