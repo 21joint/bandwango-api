@@ -13,7 +13,7 @@ let render = async (html, callback) => {
     await page.setRequestInterception(true);
     page.on('request', interceptedRequest => {
         if (interceptedRequest.url().startsWith('/'))
-            console.log(interceptedRequest.url());
+            console.info(interceptedRequest.url());
     });
     await page.setViewport({
         width: 2400,
