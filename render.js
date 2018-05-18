@@ -8,10 +8,12 @@ const path = `./${filename}`;
 let render = async (html, headers, callback) => {
     const browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        ignoreHTTPSErrors: true,
+        headless: true
     });
     const page = await browser.newPage();
-    await page.setRequestInterception(true);
     await page.setJavaScriptEnabled(false);
+    await page.setRequestInterception(true);
     page.on('request', interceptedRequest => {
         if (interceptedRequest.url().startsWith('/')) {
             interceptedRequest.continue({
@@ -29,7 +31,7 @@ let render = async (html, headers, callback) => {
         scale: 0.75
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return await fs.createReadStream(path);
+    return fs.createReadStream(path);
 };
 
 module.exports = render;
