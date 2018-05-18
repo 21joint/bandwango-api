@@ -12,9 +12,8 @@ let render = async (html, req, callback) => {
         headless: true
     });
     const page = await browser.newPage();
-    await page.setJavaScriptEnabled(false);
     const idle =  page.waitForNavigation({
-        waitUntil: 'networkidle0'
+        waitUntil: 'load'
     });
     await page.setContent(html);
     await idle;
