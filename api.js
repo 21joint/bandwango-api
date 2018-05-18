@@ -25,7 +25,7 @@ api.post('/getpdf', async (req, res, next) => {
         rejected: true,
         info: true
     });
-    const html = await buildHtml(req.get('origin'), req.body.content, stylesheet);
+    const html = await buildHtml(req.headers.origin, req.body.content, stylesheet);
     const stream = await render(html);
 
     res.set({
