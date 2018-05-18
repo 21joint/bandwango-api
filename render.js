@@ -24,15 +24,7 @@ let render = async (req, callback) => {
     await page.emulateMedia('screen');
     await page.pdf({
         path: path,
-        format: 'A4',
         printBackground: true,
-        scale: 0.75,
-        margin: {
-            top: '1cm',
-            bottom: '1cm',
-            left: '1cm',
-            right: '1cm'
-        }
     }).then(callback, (error) => console.error(error));
     await browser.close();
     return fs.createReadStream(path);
