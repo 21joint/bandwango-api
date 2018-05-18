@@ -12,12 +12,8 @@ let render = async (html, req, callback) => {
         headless: true
     });
     const page = await browser.newPage();
-    const idle =  page.waitForNavigation({
-        waitUntil: 'load'
-    });
-    await page.setContent(html);
-    await idle;
     await page.emulateMedia('screen');
+    await page.goto(`data:text/html,${html}`, { waitUntil: 'networkidle0' });
     await page.pdf({
         path: path,
         format: 'A4',
