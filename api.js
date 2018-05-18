@@ -40,7 +40,7 @@ api.post('/getpdf', async (req, res, next) => {
     console.log(stylesheet);
     const html = await buildHtml(req.headers.origin, req.body.content, stylesheet);
     console.log(html);
-
+    await html.replace(/\/fonts\//,'https://bandwango-laravel-sandbox.herokuapp.com/fonts/');
     const stream = await render(html);
 
     res.set({
