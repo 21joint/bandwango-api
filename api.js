@@ -40,7 +40,13 @@ api.post('/getpdf', async (req, res, next) => {
     const html = await buildHtml(req.headers.origin, req.body.content, stylesheet);
     console.log(html);
 
-    render(html).pipe(res);
+    const stream = await render(html).pipe(res);
+
+    await res.set({
+        'Content-Type': 'application/pdf',
+    });
+
+    stream.pipe(res);
 });
 
 // Error page.
