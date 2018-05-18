@@ -14,7 +14,8 @@ let render = async (html, headers, callback) => {
     page.on('request', interceptedRequest => {
         if (interceptedRequest.url().startsWith('/'))
             interceptedRequest.continue({
-                headers: headers
+                url: `${headers.origin}/${interceptedRequest.url()}`,
+                headers: headers,
             })
     });
     await page.setViewport({
