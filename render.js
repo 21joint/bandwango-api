@@ -10,6 +10,11 @@ let render = async (html, callback) => {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
+    await page.setRequestInterception(true);
+    page.on('request', interceptedRequest => {
+        if (interceptedRequest.url().startsWith('/'))
+            console.log(interceptedRequest);
+    });
     await page.setViewport({
         width: 1200,
         height: 800,
