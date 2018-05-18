@@ -12,10 +12,12 @@ let render = async (html, headers, callback) => {
     const page = await browser.newPage();
     await page.setRequestInterception(true);
     page.on('request', interceptedRequest => {
-        interceptedRequest.continue({
-            url: `${headers.origin}/${interceptedRequest.url()}`,
-            headers: headers,
-        })
+        if (interceptedRequest.url().startsWith('/')) {
+            interceptedRequest.continue({
+                url: `${headers.origin}/${interceptedRequest.url()}`,
+                headers: headers,
+            })
+        }
     });
     await page.setContent(html);
     await page.waitForNavigation();
@@ -24,7 +26,7 @@ let render = async (html, headers, callback) => {
         path: path,
         format: 'A4',
         printBackground: true,
-        scale: 0.72
+        scale: 0.75
     }).then(callback, (error) => console.error(error));
     await browser.close();
     return await fs.createReadStream(path);
