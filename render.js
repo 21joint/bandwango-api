@@ -15,9 +15,10 @@ let render = async (html, headers, callback) => {
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
     page.once('request', req => {
-        req.respond(html);
+        req.respond(`<html><body><div></div></body></html>`);
     });
     await page.goto(headers.origin, {waitUntil: 'networkidle0'});
+    await page.setContent(html);
     await page.emulateMedia('screen');
     await page.pdf({
         path: path,
