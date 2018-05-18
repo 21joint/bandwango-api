@@ -1,0 +1,8 @@
+{
+  "name": "bandwango-api",
+  "repository": "https://github.com/21joint/bandwango-api.git",
+  "description": "Bandwango NodeJS API",
+  "authors": [
+    "Levon G <levon@bandwango.com>"
+  ]
+}

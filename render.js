@@ -26,7 +26,7 @@ let render = async (req, callback) => {
         path: path,
         format: 'A4',
         printBackground: true,
-        scale: 0.8,
+        scale: 0.75,
         margin: {
             top: '1cm',
             bottom: '1cm',
