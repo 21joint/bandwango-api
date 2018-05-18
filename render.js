@@ -27,6 +27,7 @@ let render = async (req, callback) => {
         path: path,
         format: 'A4',
         printBackground: true,
+        scale: 0.8
     }).then(callback, (error) => console.error(error));
     await browser.close();
     return fs.createReadStream(path);
