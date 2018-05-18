@@ -11,6 +11,7 @@ let render = async (html, callback) => {
     });
     const page = await browser.newPage();
     await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 2});
+    await page.setJavaScriptEnabled(false);
     await page.setContent(html, {waitUntil: 'networkidle0'});
     await page.waitFor(2000);
     await page.pdf({
