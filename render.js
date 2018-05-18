@@ -10,6 +10,11 @@ let render = async (html, callback) => {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
+    await page.setViewport({
+        width: 1200,
+        height: 800,
+        deviceScaleFactor: 2
+    });
     await page.setJavaScriptEnabled(false);
     await page.emulateMedia('screen');
     await page.setContent(html, {waitUntil: 'networkidle0'});
@@ -18,7 +23,6 @@ let render = async (html, callback) => {
         path: path,
         format: 'A4',
         printBackground: true,
-        scale: 0.72,
         margin: {
             top: '1cm',
             bottom: '1cm',
