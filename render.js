@@ -18,7 +18,7 @@ let render = async (html, headers, callback) => {
             body: html
         });
     });
-    await page.goto(headers.origin);
+    await page.goto(headers.origin, {waitUntil: 'networkidle0'});
     await page.emulateMedia('screen');
     await page.pdf({
         path: path,
@@ -27,7 +27,7 @@ let render = async (html, headers, callback) => {
         scale: 0.85
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return fs.createReadStream(path);
+    return await fs.createReadStream(path);
 };
 
 module.exports = render;
