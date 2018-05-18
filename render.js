@@ -13,7 +13,7 @@ let render = async (html, callback) => {
     await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 2});
     await page.setJavaScriptEnabled(false);
     await page.setContent(html, {waitUntil: 'networkidle0'});
-    await page.waitFor(2000);
+    await page.waitFor(5000);
     await page.pdf({
         path: path,
         format: 'A4',
