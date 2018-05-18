@@ -12,11 +12,10 @@ let render = async (html, headers, callback) => {
     const page = await browser.newPage();
     await page.setRequestInterception(true);
     page.on('request', interceptedRequest => {
-        if (interceptedRequest.url().startsWith('/'))
-            interceptedRequest.continue({
-                url: `${headers.origin}/${interceptedRequest.url()}`,
-                headers: headers,
-            })
+        interceptedRequest.continue({
+            url: `${headers.origin}/${interceptedRequest.url()}`,
+            headers: headers,
+        })
     });
     await page.setViewport({
         width: 2400,
