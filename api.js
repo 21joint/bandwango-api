@@ -15,7 +15,6 @@ api.use(cors());
 let buildHtml = async (host, content, styles) => {
     return await `<!doctype html><html>
                         <head>
-                            <base href="${host}">
                             <title>Receipt ${new Date().getTime()}</title>
                             <meta charset="UTF-8">
                             <meta http-equiv="X-UA-Compatible" content="IE=edge">
