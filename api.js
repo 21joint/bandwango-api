@@ -13,10 +13,10 @@ api.disable('x-powered-by');
 api.use(cors());
 
 let buildHtml = async (host, content, styles) => {
-    return await `<!doctype html>
-                    <html>
+    return await `<!doctype html><html>
                         <head>
-                            <title>Receipt ${await new Date().getTime()}</title>
+                            <base href="${host}">
+                            <title>Receipt ${new Date().getTime()}</title>
                             <meta charset="UTF-8">
                             <meta http-equiv="X-UA-Compatible" content="IE=edge">
                             <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,6 +28,7 @@ let buildHtml = async (host, content, styles) => {
 
 
 api.post('/getpdf', async (req, res, next) => {
+    console.log(req.headers.origin);
     const stylesheet = await purifycss(req.body.content, req.body.styles, {
         // Will minify CSS code in addition to purify.
         minify: true,
