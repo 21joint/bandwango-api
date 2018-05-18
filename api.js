@@ -10,21 +10,6 @@ api.use(bodyParser.urlencoded({extended: false, limit: '10mb'}));
 api.disable('x-powered-by');
 api.use(cors());
 
-const buildHtml = async (host, content, styles) => {
-    return await `<!doctype html>
-            <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-                <head>
-                    <base href="${host}">
-                    <title>Receipt ${new Date().getTime()}</title>
-                    <meta charset="UTF-8">
-                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <style>${styles}</style>
-                </head>
-                <body>${content}</body>
-            </html>`;
-};
-
 api.post('/getpdf', async (req, res, next) => {
     const html = await `<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
                 <head>
@@ -45,7 +30,6 @@ api.post('/getpdf', async (req, res, next) => {
                 </head>
                 <body>${req.body.content}</body>
             </html>`;
-
     const stream = await render(html);
     res.set({
         'Content-Type': 'application/pdf',
