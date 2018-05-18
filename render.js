@@ -12,11 +12,12 @@ let render = async (html, callback) => {
     const page = await browser.newPage();
     await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 2});
     await page.setContent(html, {waitUntil: 'networkidle0'});
+    await page.waitFor(2000);
     await page.pdf({
         path: path,
         format: 'A4',
         printBackground: true,
-        scale: 0.8
+        scale: 0.75
     }).then(callback, (error) => console.error(error));
     await browser.close();
     return fs.createReadStream(path);
