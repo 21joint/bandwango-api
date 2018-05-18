@@ -12,6 +12,7 @@ let render = async (html, headers, callback) => {
         headless: true
     });
     const page = await browser.newPage();
+    await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
     page.once('request', req => {
         req.respond({
