@@ -11,7 +11,7 @@ let render = async (html, callback) => {
     });
     const page = await browser.newPage();
     await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 2});
-    await page.goto(`data:text/html, ${html.replace(/\/fonts\//, 'https://bandwango-laravel-sandbox.herokuapp.com/fonts/')}`, {waitUntil: 'networkidle0'});
+    await page.goto(`data:text/html, ${html}`, {waitUntil: 'networkidle0'});
     await page.pdf({
         path: path,
         format: 'A4',
