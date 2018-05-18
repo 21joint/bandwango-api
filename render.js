@@ -12,7 +12,6 @@ let render = async (req, callback) => {
         headless: true
     });
     const page = await browser.newPage();
-    await page.setViewport({width: 794, height: 1122, deviceScaleFactor: 2});
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
     // Capture first request only
@@ -27,12 +26,7 @@ let render = async (req, callback) => {
         path: path,
         format: 'A4',
         printBackground: true,
-        margin: {
-            top: '0.75cm',
-            bottom: '0.75cm',
-            left: '0.75cm',
-            right: '0.75cm'
-        }
+        scale: 0.72
     }).then(callback, (error) => console.error(error));
     await browser.close();
     return fs.createReadStream(path);
