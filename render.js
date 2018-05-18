@@ -15,9 +15,7 @@ let render = async (html, headers, callback) => {
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
     page.once('request', req => {
-        req.respond({
-            body: html
-        });
+        req.respond(html);
     });
     await page.goto(headers.origin, {waitUntil: 'networkidle0'});
     await page.emulateMedia('screen');
