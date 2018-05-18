@@ -23,7 +23,7 @@ let render = async (html, callback) => {
     await page.setJavaScriptEnabled(false);
     await page.emulateMedia('screen');
     await page.setContent(html);
-    await page.waitFor(1000);
+    await page.waitFor(2000);
     await page.pdf({
         path: path,
         format: 'A4',
@@ -36,7 +36,7 @@ let render = async (html, callback) => {
         }
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return await fs.createReadStream(path);
+    return fs.createReadStream(path);
 };
 
 module.exports = render;
