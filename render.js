@@ -26,12 +26,12 @@ let render = async (req, callback) => {
         path: path,
         format: 'A4',
         printBackground: true,
-        scale: 0.72,
+        scale: 0.8,
         margin: {
-            top: '0.75cm',
-            bottom: '0.75cm',
-            left: '0.75cm',
-            right: '0.75cm'
+            top: '1cm',
+            bottom: '1cm',
+            left: '1cm',
+            right: '1cm'
         }
     }).then(callback, (error) => console.error(error));
     await browser.close();
