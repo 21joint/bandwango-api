@@ -12,6 +12,7 @@ let render = async (req, callback) => {
         headless: true
     });
     const page = await browser.newPage();
+    await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
     // Capture first request only
     page.once('request', request => {
@@ -19,8 +20,8 @@ let render = async (req, callback) => {
         request.respond({body: req.body.content});
         page.on('request', request => request.continue());
     });
+    await page.goto(req.get('Referrer'), {waitUntil: 'networkidle0'});
     await page.emulateMedia('screen');
-    await page.goto(req.get('Referrer'), { waitUntil: 'networkidle0' });
     await page.pdf({
         path: path,
         format: 'A4',
