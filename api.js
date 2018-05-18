@@ -16,7 +16,7 @@ api.post('/getpdf', async (req, res, next) => {
                 <head>
                     <base href="${req.headers.origin}">
                     <title>Receipt ${new Date().getTime()}</title>
-                    <meta charset="UTF-8">
+                    <meta charset="utf-8">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                     <style media="all">${purifycss(req.body.content, req.body.styles, {// Will minify CSS code in addition to purify.
@@ -25,8 +25,7 @@ api.post('/getpdf', async (req, res, next) => {
                                 rejected: true,
                                 info: true,
                                 whitelist: ['*prh*', 'body']
-                            })}
-                    </style>
+                            })}</style>
                 </head>
                 <body>${req.body.content}</body>
             </html>`;
