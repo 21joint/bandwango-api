@@ -15,7 +15,13 @@ let render = async (html, callback) => {
     await page.pdf({
         path: path,
         format: 'A4',
-        printBackground: true
+        printBackground: true,
+        margin: {
+            top: '1cm',
+            bottom: '1cm',
+            left: '1cm',
+            right: '1cm'
+        }
     }).then(callback, (error) => console.error(error));
     await browser.close();
     return await fs.createReadStream(path);
