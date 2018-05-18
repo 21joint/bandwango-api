@@ -10,6 +10,7 @@ let render = async (html, callback) => {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
+    await page.setViewport({width: 1200, height: 800, deviceScaleFactor: 2});
     await page.setContent(html, {waitUntil: 'networkidle0'});
     await page.waitFor(2000);
     await page.pdf({
