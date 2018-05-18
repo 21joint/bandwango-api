@@ -34,7 +34,7 @@ api.post('/getpdf', async (req, res, next) => {
         // Logs out removed selectors.
         rejected: true,
         info: true,
-        whitelist: ['*prh*']
+        whitelist: ['*prh*', 'body']
     });
     const html = await buildHtml(req.headers.origin, req.body.content, stylesheet);
     const stream = await render(html);
