@@ -21,7 +21,6 @@ let render = async (html, headers, callback) => {
         }
     });
     await page.setContent(html);
-    await page.waitForNavigation();
     await page.emulateMedia('screen');
     await page.pdf({
         path: path,
