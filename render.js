@@ -16,14 +16,14 @@ let render = async (html, callback) => {
             console.log(interceptedRequest);
     });
     await page.setViewport({
-        width: 1200,
-        height: 800,
+        width: 2400,
+        height: 1600,
         deviceScaleFactor: 2
     });
     await page.setJavaScriptEnabled(false);
     await page.emulateMedia('screen');
-    await page.setContent(html, {waitUntil: 'networkidle0'});
-    await page.waitFor(5000);
+    await page.setContent(html);
+    await page.waitFor(1000);
     await page.pdf({
         path: path,
         format: 'A4',
