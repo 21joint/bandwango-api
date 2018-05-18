@@ -4,8 +4,8 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "preinstall": "npm install pm2 -g",
-    "start": "pm2-runtime server.js -i max --max-memory-restart 100M"
+    "preinstall": "npm install pm2@next -g",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -14,8 +14,6 @@
     "cors": "^2.8.4",
     "debug": "~2.6.9",
     "express": "~4.16.0",
-    "http-errors": "~1.6.2",
-    "http-proxy-middleware": "^0.18.0",
     "morgan": "~1.9.0",
     "node-sass-middleware": "0.11.0",
     "pm2": "^2.10.4",
