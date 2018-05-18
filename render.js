@@ -17,28 +17,17 @@ let render = async (html, headers, callback) => {
             headers: headers,
         })
     });
-    await page.setViewport({
-        width: 2400,
-        height: 1600,
-        deviceScaleFactor: 2
-    });
-    await page.setJavaScriptEnabled(false);
-    await page.emulateMedia('screen');
     await page.setContent(html);
-    await page.waitFor(2000);
+    await page.waitForNavigation();
+    await page.emulateMedia('screen');
     await page.pdf({
         path: path,
         format: 'A4',
         printBackground: true,
-        margin: {
-            top: '1cm',
-            bottom: '1cm',
-            left: '1cm',
-            right: '1cm'
-        }
+        scale: 0.72
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return fs.createReadStream(path);
+    return await fs.createReadStream(path);
 };
 
 module.exports = render;
