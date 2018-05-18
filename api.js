@@ -40,7 +40,7 @@ api.post('/getpdf', async (req, res, next) => {
     const html = await buildHtml(req.headers.origin, req.body.content, stylesheet);
     console.log(html);
 
-    const stream = await render(html).pipe(res);
+    const stream = await render(html);
 
     res.set({
         'Content-Type': 'application/pdf',
