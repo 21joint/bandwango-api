@@ -12,18 +12,20 @@ let render = async (req, callback) => {
         headless: true
     });
     const page = await browser.newPage();
+    await page.setViewport({width: 1024, height: 768, deviceScaleFactor: 2});
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
-    // Capture first request only
+    // Captures first request only
     page.once('request', request => {
         // Fulfill request with HTML, and continue all subsequent requests
         request.respond({body: req.body.content});
         page.on('request', request => request.continue());
     });
     await page.goto(req.get('Referrer'), {waitUntil: 'networkidle0'});
-    await page.emulateMedia('screen');
+    // await page.emulateMedia('screen');
     await page.pdf({
         path: path,
+        format: 'A4',
         printBackground: true,
     }).then(callback, (error) => console.error(error));
     await browser.close();
