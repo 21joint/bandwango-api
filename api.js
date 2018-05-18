@@ -32,6 +32,7 @@ api.post('/getpdf', async (req, res, next) => {
         const stream = await render(html, req.headers);
         res.set({
             'Content-Type': 'application/pdf',
+            'Content-Disposition': contentDisposition(stream.path)
         });
         stream.pipe(res);
 
