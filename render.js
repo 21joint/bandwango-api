@@ -11,12 +11,14 @@ let render = async (html, callback) => {
     });
     const page = await browser.newPage();
     await page.setJavaScriptEnabled(false);
+    await page.emulateMedia('screen');
     await page.setContent(html, {waitUntil: 'networkidle0'});
     await page.waitFor(5000);
     await page.pdf({
         path: path,
         format: 'A4',
         printBackground: true,
+        scale: 0.72,
         margin: {
             top: '1cm',
             bottom: '1cm',
