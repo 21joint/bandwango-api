@@ -14,9 +14,6 @@ let render = async (html, headers, callback) => {
     const page = await browser.newPage();
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
-    page.once('request', req => {
-        req.respond(`<html><body><div></div></body></html>`);
-    });
     await page.goto(headers.origin, {waitUntil: 'networkidle0'});
     await page.setContent(html);
     await page.emulateMedia('screen');
@@ -27,7 +24,7 @@ let render = async (html, headers, callback) => {
         scale: 0.85
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return await fs.createReadStream(path);
+    return fs.createReadStream(path);
 };
 
 module.exports = render;
