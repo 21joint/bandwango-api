@@ -12,17 +12,13 @@ let render = async (html, headers, callback) => {
         headless: true
     });
     const page = await browser.newPage();
-    await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
-    page.on('request', interceptedRequest => {
-        if (interceptedRequest.url().startsWith('/')) {
-            interceptedRequest.continue({
-                url: `${headers.origin}/${interceptedRequest.url()}`,
-                headers: headers,
-            })
-        }
+    page.once('request', req => {
+        req.respond({
+            body: html
+        });
     });
-    await page.setContent(html);
+    await page.goto(headers.origin);
     await page.emulateMedia('screen');
     await page.pdf({
         path: path,
