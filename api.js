@@ -12,18 +12,18 @@ api.use(bodyParser.urlencoded({extended: false, limit: '10mb'}));
 api.disable('x-powered-by');
 api.use(cors());
 
-let buildHtml = async (host, content, styles) => {
-    const _content = await content.replace(/\/fonts\//, 'https://bandwango-laravel-sandbox.herokuapp.com/fonts/');
-    return `<!doctype html><html>
-                        <head>
-                            <title>Receipt ${new Date().getTime()}</title>
-                            <meta charset="UTF-8">
-                            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                            <meta name="viewport" content="width=device-width, initial-scale=1">
-                            <style>${styles}</style>
-                        </head>
-                        <body>${_content}</body>
-                    </html>`
+const buildHtml = async (host, content, styles) => {
+    return `<!doctype html>
+            <html>
+                <head>
+                    <title>Receipt ${new Date().getTime()}</title>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <style>${styles}</style>
+                </head>
+                <body>${content}</body>
+            </html>`
 };
 
 
@@ -37,10 +37,15 @@ api.post('/getpdf', async (req, res, next) => {
         info: true,
         whitelist: ['*prh*']
     });
+    await stylesheet.replace(/\/fonts\//, 'https://bandwango-laravel-sandbox.herokuapp.com/fonts/');
     console.log(stylesheet);
+
+
     const html = await buildHtml(req.headers.origin, req.body.content, stylesheet);
+    await html.replace(/="\//, 'https://bandwango-laravel-sandbox.herokuapp.com/');
     console.log(html);
-    await html.replace(/\/fonts\//,'https://bandwango-laravel-sandbox.herokuapp.com/fonts/');
+
+
     const stream = await render(html);
 
     res.set({
