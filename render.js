@@ -10,8 +10,7 @@ let render = async (html, callback) => {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
-    await page.setContent(html);
-    await page.waitForNavigation({waitUntil: 'networkidle'});
+    await page.setContent(html, {waitUntil: 'networkidle0'});
     await page.pdf({
         path: path,
         format: 'A4',
