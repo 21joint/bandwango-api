@@ -13,7 +13,7 @@ api.disable('x-powered-by');
 api.use(cors());
 
 const buildHtml = async (host, content, styles) => {
-    return `<!doctype html>
+    return await `<!doctype html>
             <html>
                 <head>
                     <base href="https://bandwango-laravel-sandbox.herokuapp.com">
@@ -24,9 +24,8 @@ const buildHtml = async (host, content, styles) => {
                     <style>${styles}</style>
                 </head>
                 <body>${content}</body>
-            </html>`
+            </html>`;
 };
-
 
 api.post('/getpdf', async (req, res, next) => {
     const stylesheet = await purifycss(req.body.content, req.body.styles, {
