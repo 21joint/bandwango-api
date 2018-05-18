@@ -15,11 +15,10 @@ let render = async (html, callback) => {
     await page.pdf({
         path: path,
         format: 'A4',
-        printBackground: true,
-        scale: 0.72
+        printBackground: true
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return fs.createReadStream(path);
+    return await fs.createReadStream(path);
 };
 
 module.exports = render;
