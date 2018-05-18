@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "preinstall": "npm install pm2 -g",
-    "start": "pm2-runtime server.js -i max"
+    "start": "pm2-runtime server.js -i max --max-memory-restart 100M"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
