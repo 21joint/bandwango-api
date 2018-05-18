@@ -5,7 +5,7 @@ const filename = `receipt_t${new Date().getTime()}.pdf`;
 const path = `./${filename}`;
 
 
-let render = async (html, callback) => {
+let render = async (html, headers, callback) => {
     const browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
@@ -13,7 +13,9 @@ let render = async (html, callback) => {
     await page.setRequestInterception(true);
     page.on('request', interceptedRequest => {
         if (interceptedRequest.url().startsWith('/'))
-            console.info(interceptedRequest.url());
+            interceptedRequest.continue({
+                headers: headers
+            })
     });
     await page.setViewport({
         width: 2400,
