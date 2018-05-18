@@ -12,6 +12,7 @@ let render = async (req, callback) => {
         headless: true
     });
     const page = await browser.newPage();
+    await page.setViewport({width: 794, height: 1122, deviceScaleFactor: 2});
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
     // Capture first request only
