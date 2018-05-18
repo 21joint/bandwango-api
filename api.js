@@ -14,7 +14,7 @@ api.use(cors());
 
 let buildHtml = async (host, content, styles) => {
     const _content = await content.replace(/\/fonts\//, 'https://bandwango-laravel-sandbox.herokuapp.com/fonts/');
-    return await `<!doctype html><html>
+    return `<!doctype html><html>
                         <head>
                             <title>Receipt ${new Date().getTime()}</title>
                             <meta charset="UTF-8">
