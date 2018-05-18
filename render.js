@@ -11,6 +11,7 @@ let render = async (html, headers, callback) => {
     });
     const page = await browser.newPage();
     await page.setRequestInterception(true);
+    await page.setJavaScriptEnabled(false);
     page.on('request', interceptedRequest => {
         if (interceptedRequest.url().startsWith('/')) {
             interceptedRequest.continue({
