@@ -20,7 +20,7 @@ let render = async (html, callback) => {
         scale: 0.72
     }).then(callback, (error) => console.error(error));
     await browser.close();
-    return fs.createReadStream(path);
+    return await fs.createReadStream(path);
 };
 
 module.exports = render;
