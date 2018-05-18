@@ -18,14 +18,13 @@ api.post('/getpdf', async (req, res, next) => {
                     <meta charset="UTF-8">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <style media="all">${purifycss(req.body.content, req.body.styles, {
-        // Will minify CSS code in addition to purify.
-        minify: true,
-        // Logs out removed selectors.
-        rejected: true,
-        info: true,
-        whitelist: ['*prh*', 'body']
-    })};html {zoom: 0.72}
+                    <style>${purifycss(req.body.content, req.body.styles, {// Will minify CSS code in addition to purify.
+                                minify: true,
+                                // Logs out removed selectors.
+                                rejected: true,
+                                info: true,
+                                whitelist: ['*prh*', 'body']
+                            })}
                     </style>
                 </head>
                 <body>${req.body.content}</body>
