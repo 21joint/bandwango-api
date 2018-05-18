@@ -16,6 +16,7 @@ const buildHtml = async (host, content, styles) => {
     return `<!doctype html>
             <html>
                 <head>
+                    <base href="https://bandwango-laravel-sandbox.herokuapp.com">
                     <title>Receipt ${new Date().getTime()}</title>
                     <meta charset="UTF-8">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,7 +29,6 @@ const buildHtml = async (host, content, styles) => {
 
 
 api.post('/getpdf', async (req, res, next) => {
-    console.log(req.headers.origin);
     const stylesheet = await purifycss(req.body.content, req.body.styles, {
         // Will minify CSS code in addition to purify.
         minify: true,
@@ -37,15 +37,7 @@ api.post('/getpdf', async (req, res, next) => {
         info: true,
         whitelist: ['*prh*']
     });
-    await stylesheet.replace(/\/fonts\//, 'https://bandwango-laravel-sandbox.herokuapp.com/fonts/');
-    console.log(stylesheet);
-
-
     const html = await buildHtml(req.headers.origin, req.body.content, stylesheet);
-    await html.replace(/="\//, 'https://bandwango-laravel-sandbox.herokuapp.com/');
-    console.log(html);
-
-
     const stream = await render(html);
 
     res.set({
