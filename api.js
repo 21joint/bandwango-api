@@ -11,24 +11,17 @@ api.disable('x-powered-by');
 api.use(cors());
 
 api.post('/getpdf', async (req, res, next) => {
-    const html = await `<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-                <head>
-                    <base href="${req.headers.origin}">
-                    <title>Receipt ${new Date().getTime()}</title>
-                    <meta charset="utf-8">
-                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <style media="all">${purifycss(req.body.content, req.body.styles, {// Will minify CSS code in addition to purify.
-        minify: true,
-        // Logs out removed selectors.
-        rejected: true,
-        info: true,
-        whitelist: ['*prh*', 'body']
-    })}</style>
-                </head>
-                <body>${req.body.content}</body>
-            </html>`;
-    const stream = await render(html, req.headers);
+    // const html = await `<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    //             <head>
+    //                 <title>Receipt ${new Date().getTime()}</title>
+    //                 <meta charset="utf-8">
+    //                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    //                 <meta name="viewport" content="width=device-width, initial-scale=1">
+    //                 <style media="all">${req.body.styles}</style>
+    //             </head>
+    //             <body>${req.body.content}</body>
+    //         </html>`;
+    const stream = await render(req);
     res.set({
         'Content-Type': 'application/pdf',
         'Content-Disposition': contentDisposition(stream.path)
